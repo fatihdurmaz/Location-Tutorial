@@ -6,16 +6,56 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ContentView: View {
+    
+    private var locationManager = CLLocationManager()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            VStack {
+                                
+                Button("Konum İzni İste"){
+                    
+                    switch locationManager.authorizationStatus {
+                        
+                    case .notDetermined:
+                        locationManager.requestWhenInUseAuthorization()
+                    case .denied, .restricted:
+                        print("Konum izni reddedildi")
+                    case .authorizedAlways, .authorizedWhenInUse:
+                        print("Konum izni verildi")
+                        
+                    @unknown default:
+                        print("Bilinmeyen durum")
+                    }
+                    
+                    
+                }
+                .tint(.green)
+                .font(.title2)
+                .buttonStyle(.borderedProminent)
+                
+                
+                Button("Konuma Eriş"){
+                    guard let location = locationManager.location else {
+                        print("Konum bulunamadı")
+                        return
+                    }
+                    
+                    print("Konumunuz: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                    
+                    
+                }
+                .tint(.blue)
+                .font(.title2)
+                .buttonStyle(.borderedProminent)
+                
+            }
+            .navigationTitle("Konum İzni")
+            .padding()
         }
-        .padding()
     }
 }
 
