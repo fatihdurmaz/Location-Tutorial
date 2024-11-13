@@ -19,5 +19,36 @@
 
 ## Usage
 Click the Request Location Permission button to grant location access to the app.
+```swift
+// import CoreLocation
+
+switch locationManager.authorizationStatus {
+case .notDetermined:
+    // Location permission has not been requested yet, requesting permission
+    locationManager.requestWhenInUseAuthorization()
+case .restricted, .denied:
+    // Location access is restricted or denied
+    print("Location access was denied or restricted.")
+case .authorizedAlways, .authorizedWhenInUse:
+    // Location access permission granted
+    print("Location access successfully granted. The app can use location data.")
+@unknown default:
+    // Encountered an unknown status
+    print("An unknown status was encountered.")
+}
+
+```
+
 
 Click the Access Location button to fetch and display the device’s current location (latitude and longitude) in the console.
+```swift
+Button("Show Location"){
+    guard let location = locationManager.location else {
+        print("Location not found.")
+        return
+    }
+    
+    print("Your location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+}
+
+```
